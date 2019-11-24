@@ -10,6 +10,8 @@ django = "*"
 django-environ = "*"
 psycopg2-binary = "*"
 mixer = "*"
+pytest = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.7"
