@@ -5,14 +5,16 @@ Woocommerce shop, django backend for generating tickets, react app for scanning 
 ## How to start
 ```
 docker-compose up -d
+python manage.py migrate
+python manage.py demodata # takes ~40min, generates 400k random Customers
 ```
 
 # Results
 admin search for 'decker' (10 runs for 400000 rows):
-+ postgres without join:   716 ms ± 6.01 ms (105 queries)
-+ postgres without index:  627 ms ± 6.2 ms
-+ postgres with GIN index: 177 ms ± 3.63 ms, request is 3,5x faster, query is 140x faster
-
++ postgres without join:    716 ms ± 6.01 ms (105 queries)
++ postgres without index:   627 ms ± 6.2 ms
++ postgres with GIN index:  177 ms ± 3.63 ms, request is 3,5x faster, query is 140x faster
++ haystack + elasticsearch: 183 ms ± 4.12 ms, but 103 queries instead of 5
 
 
 

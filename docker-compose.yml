@@ -8,3 +8,10 @@ services:
       - "25432:5432"
     env_file:
       - .env
+    volumes:
+      - ./:/app/
+  elasticsearch:
+    image: "blacktop/elasticsearch:2.4" # alpine version
+    ports:
+      - "9200:9200"
+      - "9300:9300"

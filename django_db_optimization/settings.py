@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Added
+    "haystack",
+    # Own
     "main.apps.MainConfig",
 ]
 
@@ -77,6 +80,15 @@ WSGI_APPLICATION = "django_db_optimization.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {"default": env.db("DATABASE_URL")}
+
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": "haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine",
+        "URL": "http://127.0.0.1:9200/",
+        "INDEX_NAME": "haystack",
+    }
+}
+HAYSTACK_SIGNAL_PROCESSOR = "haystack.signals.RealtimeSignalProcessor"
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
