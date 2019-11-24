@@ -5,6 +5,7 @@ from main.models import Customer
 @admin.register(Customer)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ("first_name", "last_name", "phone_number", "manager_name")
+    list_select_related = ("manager",)
     search_fields = ("first_name", "last_name", "phone_number")
     ordering = ("first_name",)
 
