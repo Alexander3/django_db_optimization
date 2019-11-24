@@ -9,8 +9,9 @@ docker-compose up -d
 
 # Results
 admin search for 'decker' (10 runs for 400000 rows):
-+ postgres without join:  716 ms ± 6.01 ms (105 queries)
-+ postgres without index: 627 ms ± 6.2 ms
++ postgres without join:   716 ms ± 6.01 ms (105 queries)
++ postgres without index:  627 ms ± 6.2 ms
++ postgres with GIN index: 177 ms ± 3.63 ms, request is 3,5x faster, query is 140x faster
 
 
 
@@ -36,3 +37,23 @@ WHERE (UPPER("main_customer"."first_name"::text) LIKE UPPER('%decker%') OR
  Planning Time: 0.250 ms
  Execution Time: 264.560 ms
 ```
+
+```
+                                                                                   QUERY PLAN                                                                                   
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1667.91..1667.92 rows=1 width=8) (actual time=1.774..1.774 rows=1 loops=1)
+   ->  Bitmap Heap Scan on main_customer  (cost=183.17..1666.95 rows=384 width=0) (actual time=0.675..1.708 rows=181 loops=1)
+         Recheck Cond: ((upper((first_name)::text) ~~ '%DECKER%'::text) OR (upper((last_name)::text) ~~ '%DECKER%'::text) OR (upper((phone_number)::text) ~~ '%DECKER%'::text))
+         Heap Blocks: exact=181
+         ->  BitmapOr  (cost=183.17..183.17 rows=384 width=0) (actual time=0.590..0.590 rows=0 loops=1)
+               ->  Bitmap Index Scan on customer_admin_search  (cost=0.00..60.96 rows=128 width=0) (actual time=0.069..0.069 rows=0 loops=1)
+                     Index Cond: (upper((first_name)::text) ~~ '%DECKER%'::text)
+               ->  Bitmap Index Scan on customer_admin_search  (cost=0.00..60.96 rows=128 width=0) (actual time=0.495..0.495 rows=181 loops=1)
+                     Index Cond: (upper((last_name)::text) ~~ '%DECKER%'::text)
+               ->  Bitmap Index Scan on customer_admin_search  (cost=0.00..60.96 rows=128 width=0) (actual time=0.024..0.024 rows=0 loops=1)
+                     Index Cond: (upper((phone_number)::text) ~~ '%DECKER%'::text)
+ Planning Time: 0.268 ms
+ Execution Time: 1.878 ms
+```
+
+**
