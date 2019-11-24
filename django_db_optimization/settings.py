@@ -124,5 +124,8 @@ LOGGING = {
         }
     },
     "root": {"handlers": ["console"], "level": "DEBUG" if DEBUG else "INFO"},
-    "loggers": {"django.db": {"level": "DEBUG"}, "faker": {"level": "WARNING"}},
+    "loggers": {
+        "django.db": {"level": "INFO"},  # Change it to DEBUG to see queries
+        "faker": {"level": "WARNING"},
+    },
 }

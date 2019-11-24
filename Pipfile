@@ -12,6 +12,7 @@ psycopg2-binary = "*"
 mixer = "*"
 pytest = "*"
 pytest-django = "*"
+ipython = "*"
 
 [requires]
 python_version = "3.7"
