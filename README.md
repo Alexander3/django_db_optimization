@@ -1,23 +1,32 @@
 # Django DB Optimizations
 
-Woocommerce shop, django backend for generating tickets, react app for scanning codes
+Example code that shows how to add postgres index that will make searching admin ultra fast.  
+There's also comparison with Haystack + Elasticsearch.
 
 ## How to start
 ```
 docker-compose up -d
-python manage.py migrate
-python manage.py demodata # takes ~40min, generates 400k random Customers
+pipenv sync
+pipenv run python manage.py migrate
+pipenv run python manage.py demodata # takes ~40min, generates 400k random Customers
+pytest
 ```
+If you want to check how postgres behaves without GIN index use  
+`pipenv run python manage.py migrate main 0001`
 
 # Results
-admin search for 'decker' (10 runs for 400000 rows):
+Admin search for 'decker'   (avg    ±  stdev  10 runs for 400000 rows):
 + postgres without join:    716 ms ± 6.01 ms (105 queries)
-+ postgres without index:   627 ms ± 6.2 ms
++ postgres without index:   627 ms ± 6.2 ms  (5 queries)
 + postgres with GIN index:  177 ms ± 3.63 ms, request is 3,5x faster, query is 140x faster
-+ haystack + elasticsearch: 183 ms ± 4.12 ms, but 103 queries instead of 5
++ haystack + elasticsearch: 183 ms ± 4.12 ms, but 103 queries
+(it could be optimized further, but probably needs changes in haystack code, it's just missing `select_reltated`)
 
 
-
+## How to find why query is slow
+Identify slow queries by running with ` "loggers": { "django.db": {"level": "INFO"} ... }`  
+Then inspect query with
+`pipenv run python manage.py dbshell`
 ``` sql
 EXPLAIN ANALYZE 
 SELECT COUNT(*) AS "__count" FROM "main_customer" 
@@ -39,7 +48,7 @@ WHERE (UPPER("main_customer"."first_name"::text) LIKE UPPER('%decker%') OR
  Planning Time: 0.250 ms
  Execution Time: 264.560 ms
 ```
-
+Result after creating index
 ```
                                                                                    QUERY PLAN                                                                                   
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
