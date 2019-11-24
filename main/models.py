@@ -85,7 +85,9 @@ class Manager(BaseModel):
 
 class Customer(BaseModel):
     class Meta:
-        indexes = [GinIndex(fields=["first_name", "last_name", "phone_number"])]
+        pass
+        # Added by RunSQL to support case insensitive lookup
+        # indexes = [GinIndex(fields=["first_name", "last_name", "phone_number"])]
 
     manager = models.ForeignKey(
         Manager, on_delete=models.CASCADE, related_name="customers"
