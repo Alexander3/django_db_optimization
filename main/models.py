@@ -1,3 +1,4 @@
+from django.contrib.postgres.indexes import GinIndex
 from django.db import models
 
 
@@ -83,6 +84,9 @@ class Manager(BaseModel):
 
 
 class Customer(BaseModel):
+    class Meta:
+        indexes = [GinIndex(fields=["first_name", "last_name", "phone_number"])]
+
     manager = models.ForeignKey(
         Manager, on_delete=models.CASCADE, related_name="customers"
     )
