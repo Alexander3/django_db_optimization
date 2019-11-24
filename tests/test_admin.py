@@ -1,7 +1,7 @@
 import pytest
+
 from django.conf import settings
 from django.urls import reverse
-
 from django_db_optimization.settings import DATABASES
 from main.models import Customer
 from tests.utils import timeit
