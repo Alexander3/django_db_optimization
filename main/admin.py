@@ -6,3 +6,4 @@ from main.models import Customer
 class TicketAdmin(admin.ModelAdmin):
     list_display = ("first_name", "last_name", "phone_number", "manager")
     search_fields = ("first_name", "last_name", "phone_number")
+    ordering = ("first_name",)
