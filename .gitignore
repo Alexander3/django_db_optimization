@@ -28,3 +28,4 @@ __pycache__/
 
 .idea/codeStyles/codeStyleConfig.xml
 .idea/inspectionProfiles/Project_Default.xml
+.idea/$CACHE_FILE$
