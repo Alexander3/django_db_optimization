@@ -139,5 +139,7 @@ LOGGING = {
     "loggers": {
         "django.db": {"level": "INFO"},  # Change it to DEBUG to see queries
         "faker": {"level": "WARNING"},
+        "elasticsearch": {"level": "WARNING"},
+        "urllib3": {"level": "INFO"},
     },
 }
